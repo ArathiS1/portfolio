@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strategic Sales Performance Analytics | Data-Driven Growth Strategy</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <!-- AOS CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #2ecc71;
+            --text: #333333;
+            --text-light: #7f8c8d;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Open Sans', sans-serif;
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+        
+        p, li {
+            text-align: justify;
+            text-justify: inter-word;
+        }
+        
+        /* Header & Navigation */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        header.scrolled {
+            padding: 0.5rem 0;
+        }
+        
+        .logo {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+        
+        .logo span {
+            color: var(--secondary);
+        }
+        
+        .navbar-nav .nav-link {
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+            margin: 0 0.5rem;
+        }
+        
+        .navbar-nav .nav-link:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--secondary);
+            transition: width 0.3s ease;
+        }
+        
+        .navbar-nav .nav-link:hover {
+            color: var(--secondary);
+        }
+        
+        .navbar-nav .nav-link:hover:after {
+            width: 100%;
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding-top: 8rem;
+            padding-bottom: 5rem;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero:before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            z-index: 0;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%233498db' fill-opacity='0.1' d='M0,128L48,117.3C96,107,192,85,288,112C384,139,480,213,576,218.7C672,224,768,160,864,138.7C960,117,1056,139,1152,149.3C1248,160,1344,160,1392,160L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E");
+            background-size: contain;
+            animation: wave 20s linear infinite;
+        }
+        
+        @keyframes wave {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero-image {
+            text-align: center;
+            position: relative;
+        }
+        
+        .hero-image img {
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s;
+        }
+        
+        .hero-image:after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 15px;
+            left: 15px;
+            border: 2px solid var(--secondary);
+            border-radius: 8px;
+            z-index: -1;
+            transition: all 0.3s ease;
+        }
+        
+        .hero-image:hover:after {
+            top: 10px;
+            left: 10px;
+        }
+        
+        .hero-image img:hover {
+            transform: scale(1.02);
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: var(--text-light);
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.8rem;
+            background-color: var(--secondary);
+            color: white;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 100%;
+            background-color: var(--primary);
+            transition: all 0.3s;
+            border-radius: 50px;
+            z-index: -1;
+        }
+        
+        .btn:hover:before {
+            width: 100%;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Section Styling */
+        section {
+            padding: 5rem 0;
+            position: relative;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .section-title h2 {
+            font-size: 2.2rem;
+            position: relative;
+            display: inline-block;
+            padding-bottom: 0.5rem;
+        }
+        
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: var(--secondary);
+        }
+        
+        /* Problem & Solution */
+        .problem-solution {
+            background-color: white;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            height: 100%;
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 0;
+            background: linear-gradient(to bottom, var(--secondary), var(--primary));
+            transition: height 0.3s ease;
+        }
+        
+        .card:hover:before {
+            height: 100%;
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card i {
+            font-size: 2.5rem;
+            color: var(--secondary);
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s;
+        }
+        
+        .card:hover i {
+            transform: scale(1.1);
+        }
+        
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        /* Tools */
+        .tools {
+            background-color: var(--light);
+        }
+        
+        .tool-item {
+            background-color: white;
+            padding: 1.5rem 2rem;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            min-width: 180px;
+            transition: all 0.3s ease;
+        }
+        
+        .tool-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tool-item i {
+            font-size: 2.5rem;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+            transition: transform 0.3s;
+        }
+        
+        .tool-item:hover i {
+            transform: scale(1.2);
+        }
+        
+        /* Results */
+        .results {
+            background-color: white;
+        }
+        
+        .result-item {
+            margin-bottom: 2.5rem;
+            padding: 1.5rem;
+            border-left: 4px solid var(--secondary);
+            background-color: var(--light);
+            border-radius: 0 8px 8px 0;
+            transition: all 0.3s ease;
+        }
+        
+        .result-item:hover {
+            transform: translateX(5px);
+            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .result-item h3 {
+            display: flex;
+            align-items: center;
+        }
+        
+        .result-item h3 i {
+            margin-right: 0.5rem;
+            color: var(--secondary);
+        }
+        
+        /* CTA Section */
+        .cta {
+            background: linear-gradient(135deg, #3498db 0%, #2c3e50 100%);
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23ffffff' fill-opacity='0.1' d='M0,128L48,117.3C96,107,192,85,288,112C384,139,480,213,576,218.7C672,224,768,160,864,138.7C960,117,1056,139,1152,149.3C1248,160,1344,160,1392,160L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E");
+            background-size: cover;
+            background-position: center;
+            animation: wave 15s linear infinite;
+        }
+        
+        .cta .container {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .cta h2 {
+            color: white;
+        }
+        
+        .cta p {
+            margin-bottom: 2rem;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+        
+        .btn-light {
+            background-color: white;
+            color: var(--primary);
+        }
+        
+        .btn-light:before {
+            background-color: var(--light);
+        }
+        
+        .btn-light:hover {
+            background-color: var(--light);
+            color: var(--primary);
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            margin: 1.5rem 0;
+            padding: 0;
+        }
+        
+        .footer-links li {
+            margin: 0 1rem;
+        }
+        
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--secondary);
+        }
+        
+        /* Code Block Styling */
+        .code-block {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 2rem 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .sql-keyword {
+            color: #f92672;
+        }
+        
+        .sql-function {
+            color: #66d9ef;
+        }
+        
+        .sql-string {
+            color: #a6e22e;
+        }
+        
+        /* Back to top button */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--secondary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 999;
+        }
+        
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .back-to-top:hover {
+            background-color: var(--primary);
+            transform: translateY(-3px);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header & Navigation -->
+    <header id="header">
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <div class="container">
+                <a class="navbar-brand logo" href="#">Sales<span>Analytics</span></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#problem">Problem</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#solution">Solution</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#tools">Tools</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#results">Results</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#download">Download</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="row align-items-center hero-content">
+                <div class="col-lg-6" data-aos="fade-right">
+                    <div class="hero-text">
+                        <h1>Strategic Sales Performance Analytics</h1>
+                        <p>Data-driven insights to identify growth opportunities, optimize resource allocation, and maximize profitability across sales channels and regions.</p>
+                        <a href="#download" class="btn">View Dashboard</a>
+                    </div>
+                </div>
+                <div class="col-lg-6" data-aos="fade-left" data-aos-delay="300">
+                    <div class="hero-image">
+                        <img src="https://raw.githubusercontent.com/ArathiS1/Sales-Performance-Analytics/main/images/Sales_Insights.png" alt="Sales Insights Dashboard">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Statement -->
+    <section id="problem" class="problem-solution">
+        <div class="container">
+            <div class="section-title" data-aos="fade-up">
+                <h2>Problem Statement</h2>
+            </div>
+            <div class="row">
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="card h-100">
+                        <i class="fas fa-chart-line"></i>
+                        <h3>Delayed Decision-Making</h3>
+                        <p>Manual report consolidation processes slow down critical business decisions, causing missed opportunities in fast-moving markets.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="card h-100">
+                        <i class="fas fa-balance-scale-right"></i>
+                        <h3>Ineffective Resource Allocation</h3>
+                        <p>Without clear visibility into performance drivers, resources are often allocated to underperforming products and regions.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="card h-100">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h3>Customer Churn & Returns</h3>
+                        <p>Inability to proactively address customer churn and return rate issues directly impacts profitability and customer satisfaction.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution -->
+    <section id="solution" class="problem-solution" style="background-color: #f8f9fa;">
+        <div class="container">
+            <div class="section-title" data-aos="fade-up">
+                <h2>Solution & Objectives</h2>
+            </div>
+            <div class="row">
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="card h-100">
+                        <i class="fas fa-search"></i>
+                        <h3>Identify Growth Levers</h3>
+                        <p>Pinpoint top-performing products, regions, and customer segments to focus resources on high-potential areas.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="card h-100">
+                        <i class="fas fa-stethoscope"></i>
+                        <h3>Diagnose Operational Issues</h3>
+                        <p>Analyze return rates and customer behavior to identify and mitigate sources of revenue loss.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="card h-100">
+                        <i class="fas fa-chart-bar"></i>
+                        <h3>Track Performance Trends</h3>
+                        <p>Monitor Year-over-Year (YoY) growth and Average Order Value (AOV) to measure business health.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tools Used -->
+    <section id="tools" class="tools">
+        <div class="container">
+            <div class="section-title" data-aos="fade-up">
+                <h2>Tools Used</h2>
+            </div>
+            <div class="d-flex justify-content-center flex-wrap tools-grid">
+                <div class="tool-item m-3" data-aos="zoom-in" data-aos-delay="100">
+                    <i class="fas fa-chart-pie"></i>
+                    <h3>Power BI</h3>
+                </div>
+                <div class="tool-item m-3" data-aos="zoom-in" data-aos-delay="200">
+                    <i class="fas fa-database"></i>
+                    <h3>SQL</h3>
+                </div>
+                <div class="tool-item m-3" data-aos="zoom-in" data-aos-delay="300">
+                    <i class="fas fa-code"></i>
+                    <h3>DAX</h3>
+                </div>
+                <div class="tool-item m-3" data-aos="zoom-in" data-aos-delay="400">
+                    <i class="fas fa-table"></i>
+                    <h3>Excel</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Methodology -->
+    <section class="methodology">
+        <div class="container">
+            <div class="section-title" data-aos="fade-up">
+                <h2>Methodology & Process</h2>
+            </div>
+            <div class="row">
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="card h-100">
+                        <i class="fas fa-download"></i>
+                        <h3>Data Acquisition & Cleaning</h3>
+                        <p>Raw sales data extracted from the SQL database and transformed for analysis.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="card h-100">
+                        <i class="fas fa-cube"></i>
+                        <h3>Data Modeling</h3>
+                        <p>Star-schema with Fact_Sales and dimensions (Date, Product, Customer, Region).</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="card h-100">
+                        <i class="fas fa-calculator"></i>
+                        <h3>DAX & Measure Engineering</h3>
+                        <p>Created KPIs like Total Sales LY, YoY Growth, Return Rate, and AOV.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- SQL Code Example -->
+            <div data-aos="fade-up" data-aos-delay="400">
+                <h3 style="margin-top: 3rem;">SQL Example</h3>
+                <div class="code-block">
+                    <pre><code><span class="sql-keyword">WITH</span> SalesByYear <span class="sql-keyword">AS</span> (
+    <span class="sql-keyword">SELECT</span>
+        ProductName,
+        <span class="sql-function">YEAR</span>(OrderDate) <span class="sql-keyword">AS</span> OrderYear,
+        <span class="sql-function">SUM</span>(SalesAmount) <span class="sql-keyword">AS</span> TotalSales
+    <span class="sql-keyword">FROM</span> Fact_Sales fs
+    <span class="sql-keyword">JOIN</span> Dim_Product dp <span class="sql-keyword">ON</span> fs.ProductKey = dp.ProductKey
+    <span class="sql-keyword">GROUP BY</span> ProductName, <span class="sql-function">YEAR</span>(OrderDate)
+)
+<span class="sql-keyword">SELECT</span>
+    ProductName,
+    OrderYear,
+    TotalSales,
+    <span class="sql-function">LAG</span>(TotalSales) <span class="sql-keyword">OVER</span> (<span class="sql-keyword">PARTITION BY</span> ProductName <span class="sql-keyword">ORDER BY</span> OrderYear) <span class="sql-keyword">AS</span> SalesLY,
+    (TotalSales - <span class="sql-function">LAG</span>(TotalSales) <span class="sql-keyword">OVER</span> (<span class="sql-keyword">PARTITION BY</span> ProductName <span class="sql-keyword">ORDER BY</span> OrderYear)) /
+    <span class="sql-function">LAG</span>(TotalSales) <span class="sql-keyword">OVER</span> (<span class="sql-keyword">PARTition BY</span> ProductName <span class="sql-keyword">ORDER BY</span> OrderYear) * <span class="sql-number">100</span> <span class="sql-keyword">AS</span> YoYGrowth
+<span class="sql-keyword">FROM</span> SalesByYear
+<span class="sql-keyword">ORDER BY</span> ProductName, OrderYear;</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results -->
+    <section id="results" class="results">
+        <div class="container">
+            <div class="section-title" data-aos="fade-up">
+                <h2>Results & Business Impact</h2>
+            </div>
+            <div data-aos="fade-up">
+                <div class="result-item">
+                    <h3><i class="fas fa-exclamation-circle"></i> High-Value Customer Concentration Risk</h3>
+                    <p>Top 7 customers contribute ~$36K of $8.41M revenue.</p>
+                    <p><strong>Recommendation:</strong> Key account management + cross-sell program.</p>
+                </div>
+                <div class="result-item">
+                    <h3><i class="fas fa-rocket"></i> Massive Growth in Electronics</h3>
+                    <p>Phone B drives $6.38M (79%) of revenue.</p>
+                    <p><strong>Recommendation:</strong> Promote accessories to lift AOV & LTV.</p>
+                </div>
+                <div class="result-item">
+                    <h3><i class="fas fa-chart-line"></i> Strong Performance</h3>
+                    <p>64.86% YoY growth, AOV $700.97, return rate 0.04%.</p>
+                    <p><strong>Recommendation:</strong> Maintain quality focus; scale campaigns.</p>
+                </div>
+                <div class="result-item">
+                    <h3><i class="fas fa-globe"></i> Regional & Channel Analysis</h3>
+                    <p>Re-allocate budgets to high-performing channels in underpenetrated regions.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA / Download -->
+    <section id="download" class="cta">
+        <div class="container">
+            <div class="section-title" data-aos="fade-up">
+                <h2>Project Resources</h2>
+            </div>
+            <p data-aos="fade-up">Access the Power BI dashboard and SQL queries to explore the sales performance analytics yourself.</p>
+            <div data-aos="fade-up" data-aos-delay="200" class="d-flex justify-content-center flex-wrap">
+                <a href="https://drive.google.com/file/d/1O-LpWOa-bEESuPVEQDw6YzVpj3bTBfaR/view?usp=sharing" class="btn btn-light m-2" target="_blank">
+                    <i class="fas fa-download"></i> Download Power BI Dashboard
+                </a>
+                <a href="https://github.com/ArathiS1/Sales-Performance-Analytics/blob/main/sql/queries.sql" class="btn btn-light m-2" target="_blank">
+                    <i class="fas fa-code"></i> View SQL Queries
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="logo" style="color: white;">Sales<span>Analytics</span></div>
+            <ul class="footer-links">
+                <li><a href="#problem">Problem</a></li>
+                <li><a href="#solution">Solution</a></li>
+                <li><a href="#tools">Tools</a></li>
+                <li><a href="#results">Results</a></li>
+                <li><a href="#download">Download</a></li>
+            </ul>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <a href="#" class="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- AOS JS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <!-- Custom JS -->
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('header');
+            const backToTop = document.querySelector('.back-to-top');
+            
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+            
+            if (window.scrollY > 500) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Back to top functionality
+        document.querySelector('.back-to-top').addEventListener('click', function(e) {
+            e.preventDefault();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+</html>

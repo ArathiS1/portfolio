@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predictive Customer Churn Analysis | Data Science Portfolio</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <!-- AOS CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/3b161c540c.js" crossorigin="anonymous"></script>
+    
+    <style>
+        :root {
+            --primary: #1a73e8;
+            --primary-dark: #0d47a1;
+            --secondary: #34a853;
+            --accent: #fbbc04;
+            --dark: #202124;
+            --light: #f8f9fa;
+            --gray: #5f6368;
+            --light-gray: #dadce0;
+            --card-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+            --gradient-primary: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            --gradient-hero: linear-gradient(120deg, #4b6cb7 0%, #182848 100%);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: var(--light);
+            overflow-x: hidden;
+            text-align: justify;
+        }
+        
+        h1, h2, h3, h4, h5 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+        
+        p, li {
+            text-align: justify;
+        }
+        
+        .text-justify {
+            text-align: justify;
+        }
+        
+        .section-title {
+            position: relative;
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+        
+        .section-title:after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            margin: 0.5rem auto;
+            border-radius: 2px;
+        }
+        
+        /* Header & Navigation */
+        header {
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .navbar-brand i {
+            margin-right: 0.5rem;
+        }
+        
+        .nav-link {
+            font-weight: 500;
+            color: var(--dark);
+            transition: color 0.3s;
+            font-size: 0.95rem;
+            position: relative;
+        }
+        
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--primary);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary);
+        }
+        
+        .nav-link:hover:after {
+            width: 100%;
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 10rem 0 5rem;
+            text-align: center;
+            background: var(--gradient-hero);
+            position: relative;
+            overflow: hidden;
+            color: white;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23ffffff' fill-opacity='0.1' d='M0,128L48,117.3C96,107,192,85,288,112C384,139,480,213,576,218.7C672,224,768,160,864,138.7C960,117,1056,139,1152,149.3C1248,160,1344,160,1392,160L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E");
+            background-size: cover;
+            background-position: center;
+            opacity: 0.2;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            color: white;
+            line-height: 1.2;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .hero p {
+            font-size: 1.35rem;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            font-weight: 300;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.9rem 2rem;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            margin: 0.5rem;
+            box-shadow: 0 4px 12px rgba(26, 115, 232, 0.3);
+            border: none;
+        }
+        
+        .btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(26, 115, 232, 0.4);
+            color: white;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid white;
+            color: white;
+            box-shadow: none;
+        }
+        
+        .btn-outline:hover {
+            background-color: white;
+            color: var(--primary);
+        }
+        
+        .btn i {
+            margin-right: 0.5rem;
+        }
+        
+        /* Sections */
+        section {
+            padding: 6rem 0;
+        }
+        
+        /* Overview Section */
+        .overview {
+            background-color: white;
+        }
+        
+        /* Problem Section */
+        .problem {
+            background-color: #f8fafd;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .problem::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(26, 115, 232, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            transform: translate(30%, -30%);
+        }
+        
+        .problem-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .problem-list li {
+            margin-bottom: 1rem;
+            padding-left: 1.8rem;
+            position: relative;
+            line-height: 1.6;
+        }
+        
+        .problem-list li:before {
+            content: '•';
+            color: var(--primary);
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+            font-size: 1.2rem;
+        }
+        
+        .problem-image {
+            background: linear-gradient(135deg, #e3effd 0%, #c9e0f5 100%);
+            border-radius: 12px;
+            padding: 2.5rem;
+            box-shadow: var(--card-shadow);
+            min-height: 350px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+        
+        /* Solution Section */
+        .solution {
+            background-color: white;
+            position: relative;
+        }
+        
+        .solution::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(52, 168, 83, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            transform: translate(-30%, 30%);
+        }
+        
+        .objective-card {
+            background-color: white;
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-top: 4px solid var(--primary);
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .objective-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(26, 115, 232, 0.03) 0%, transparent 100%);
+            z-index: 0;
+        }
+        
+        .objective-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .objective-card i {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Tools Section */
+        .tools {
+            background-color: #f8fafd;
+            position: relative;
+        }
+        
+        .tools::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(251, 188, 4, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            transform: translate(30%, 30);
+        }
+        
+        .tool-item {
+            background-color: white;
+            padding: 2rem 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s;
+            height: 100%;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .tool-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Insights Section */
+        .insights {
+            background-color: white;
+        }
+        
+        .insight-card {
+            background: linear-gradient(135deg, #f8fafd 0%, #e8f0fe 100%);
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s;
+            height: 100%;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .insight-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .insight-card h3 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .insight-card h3 i {
+            margin-right: 0.8rem;
+            font-size: 1.5rem;
+        }
+        
+        .image-card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            transition: transform 0.3s;
+            height: 100%;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .image-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .image-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: contain;
+            transition: transform 0.5s;
+            padding: 15px;
+            background: #f8f9fa;
+        }
+        
+        .image-card:hover img {
+            transform: scale(1.05);
+        }
+        
+        .image-card-body {
+            padding: 1.5rem;
+        }
+        
+        .image-card-body h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        /* Methodology Section */
+        .methodology {
+            background: linear-gradient(to bottom, #f8fafd 0%, #e8f0fe 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .methodology::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(26, 115, 232, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            transform: translate(-30%, -30%);
+        }
+        
+        .process-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+            position: relative;
+        }
+        
+        .step-number {
+            background: var(--gradient-primary);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            flex-shrink: 0;
+            font-size: 1.2rem;
+            box-shadow: 0 5px 15px rgba(26, 115, 232, 0.3);
+        }
+        
+        .step-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            flex: 1;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .step-content h3 {
+            margin-bottom: 1rem;
+            color: var(--primary-dark);
+        }
+        
+        /* Results Section */
+        .results {
+            background-color: white;
+            position: relative;
+        }
+        
+        .results::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(52, 168, 83, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            transform: translate(30%, 30%);
+        }
+        
+        .result-card {
+            background: linear-gradient(135deg, #f0f7ff 0%, #e3f2fd 100%);
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s;
+            height: 100%;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .result-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .result-card h3 {
+            color: var(--secondary);
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .result-card h3 i {
+            margin-right: 0.8rem;
+        }
+        
+        /* Recommendations Section */
+        .recommendations {
+            background: linear-gradient(to bottom, #f8fafd 0%, #e8f0fe 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .recommendations::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(251, 188, 4, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            transform: translate(30%, 30%);
+        }
+        
+        .recommendation-card {
+            background-color: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s;
+            border-left: 4px solid var(--accent);
+            height: 100%;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .recommendation-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .recommendation-card h3 {
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .recommendation-card h3 i {
+            margin-right: 0.8rem;
+        }
+        
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, var(--dark) 0%, #000 100%);
+            color: white;
+            padding: 4rem 0 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23ffffff' fill-opacity='0.05' d='M0,128L48,117.3C96,107,192,85,288,112C384,139,480,213,576,218.7C672,224,768,160,864,138.7C960,117,1056,139,1152,149.3C1248,160,1344,160,1392,160L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E");
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+            margin: 0 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .social-links a:hover {
+            background-color: var(--primary);
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            width: 100%;
+            color: #b0b0b0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+            
+            .problem-image {
+                min-height: 300px;
+                margin-top: 2rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.4rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            section {
+                padding: 4rem 0;
+            }
+            
+            .process-step {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .step-number {
+                margin: 0 auto;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .hero {
+                padding: 8rem 0 3rem;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .btn {
+                display: block;
+                margin: 0.5rem auto;
+                width: 80%;
+            }
+        }
+
+        /* Image enhancements */
+        .img-container {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .img-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .img-caption {
+            font-style: italic;
+            color: var(--gray);
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+
+        /* Text alignment fixes */
+        .content-wrapper {
+            text-align: justify;
+        }
+        
+        .content-wrapper p {
+            text-align: justify;
+            margin-bottom: 1.2rem;
+        }
+        
+        .content-wrapper h3, .content-wrapper h4 {
+            text-align: left;
+        }
+        
+        .centered-content {
+            text-align: center;
+        }
+        
+        .centered-content .btn {
+            display: inline-flex;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header & Navigation -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-white py-3">
+            <div class="container">
+                <a class="navbar-brand" href="#">
+                    <i class="fas fa-chart-line"></i> ChurnAnalysis
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#overview">Overview</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#problem">Problem</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#solution">Solution</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#insights">Insights</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#methodology">Methodology</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#results">Results</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1 data-aos="fade-up" data-aos-duration="1000">Predictive Customer Churn Analysis</h1>
+            <p data-aos="fade-up" data-aos-duration="1000" data-aos-delay="100">Leveraging Machine Learning to Reduce Customer Attrition and Drive Retention Strategy</p>
+            <div class="centered-content" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
+                <a href="#solution" class="btn">
+                    <i class="fas fa-search"></i> Explore Project
+                </a>
+                <a href="https://github.com/ArathiS1/Customer-Churn-Predictive-Modeling/tree/main" class="btn btn-outline" target="_blank">
+                    <i class="fab fa-github"></i> GitHub Repository
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overview Section -->
+    <section id="overview" class="overview">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Project Overview</h2>
+            <div class="row justify-content-center">
+                <div class="col-lg-10 content-wrapper" data-aos="fade-up" data-aos-delay="100">
+                    <p>This project presents an end-to-end predictive analytics solution designed to tackle customer churn in the telecommunications industry. By leveraging machine learning techniques and comprehensive data analysis, this model identifies at-risk customers and provides actionable insights to drive retention strategies.</p>
+                    <p>The analysis was conducted using a real-world telecommunications dataset, exploring various customer demographics, account information, and service usage patterns to build a robust predictive model. The project follows a structured data science workflow from data collection and preprocessing to model deployment and business strategy formulation.</p>
+                    <div class="centered-content mt-4" data-aos="fade-up" data-aos-delay="200">
+                        <a href="https://github.com/ArathiS1/Customer-Churn-Predictive-Modeling/tree/main" class="btn" target="_blank">
+                            <i class="fab fa-github"></i> View Full Code on GitHub
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section id="problem" class="problem">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Business Challenge</h2>
+            <p class="text-center mb-5 content-wrapper" data-aos="fade-up" data-aos-delay="100">A telecom company is experiencing high customer churn but lacks a clear understanding of why customers are leaving and which customers are most likely to churn next.</p>
+            
+            <div class="row">
+                <div class="col-lg-6 content-wrapper" data-aos="fade-right" data-aos-delay="200">
+                    <div class="bg-white p-4 rounded shadow-sm">
+                        <p>This leads to inefficient retention efforts, wasted marketing spend, and continued revenue loss. Without a data-driven approach, the company was unable to:</p>
+                        
+                        <ul class="problem-list">
+                            <li>Identify at-risk customers before they churned</li>
+                            <li>Understand the key factors driving churn behavior</li>
+                            <li>Allocate retention resources efficiently</li>
+                            <li>Develop targeted retention strategies</li>
+                            <li>Measure the effectiveness of retention campaigns</li>
+                        </ul>
+                        
+                        <p class="mt-3">The financial impact of customer churn is substantial, with acquisition costs for new customers being 5-25 times higher than retention costs for existing ones. Additionally, loyal customers tend to spend more over time and provide valuable word-of-mouth marketing.</p>
+                    </div>
+                </div>
+                <div class="col-lg-6" data-aos="fade-left" data-aos-delay="300">
+                    <div class="bg-white p-4 rounded shadow-sm h-100">
+                        <h3 class="mb-4 text-center">The Cost of Churn</h3>
+                        <div class="d-flex align-items-center mb-4">
+                            <div class="bg-danger rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 60px; height: 60px;">
+                                <i class="fas fa-exclamation-triangle text-white"></i>
+                            </div>
+                            <div class="content-wrapper">
+                                <h4 class="mb-0">27% Higher</h4>
+                                <p class="mb-0">Churn rate in telecom compared to other industries</p>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center mb-4">
+                            <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 60px; height: 60px;">
+                                <i class="fas fa-dollar-sign text-white"></i>
+                            </div>
+                            <div class="content-wrapper">
+                                <h4 class="mb-0">$1.6B Annual Loss</h4>
+                                <p class="mb-0">Estimated revenue loss for mid-sized telecom companies</p>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <div class="bg-warning rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 60px; height: 60px;">
+                                <i class="fas fa-chart-line text-white"></i>
+                            </div>
+                            <div class="content-wrapper">
+                                <h4 class="mb-0">5% Reduction</h4>
+                                <p class="mb-0">In churn can increase profits by 25-125%</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section id="solution" class="solution">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Solution Approach</h2>
+            <p class="text-center mb-5 content-wrapper" data-aos="fade-up" data-aos-delay="100">I developed an end-to-end predictive analytics solution to diagnose the root causes of churn and identify high-risk customers.</p>
+            
+            <div class="row">
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="objective-card content-wrapper">
+                        <i class="fas fa-search"></i>
+                        <h3>Diagnose</h3>
+                        <p>Uncover the key factors driving customer churn through advanced analytics and feature importance analysis using SHAP values and permutation importance.</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="objective-card content-wrapper">
+                        <i class="fas fa-chart-line"></i>
+                        <h3>Predict</h3>
+                        <p>Build a machine learning model to accurately score each customer's churn risk with high precision using RandomForest and XGBoost algorithms.</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="400">
+                    <div class="objective-card content-wrapper">
+                        <i class="fas fa-rocket"></i>
+                        <h3>Actionize</h3>
+                        <p>Provide a data-driven framework for the retention team to prioritize interventions and maximize ROI through targeted retention campaigns.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tools Section -->
+    <section class="tools">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Tools & Technologies</h2>
+            <p class="text-center mb-5 content-wrapper" data-aos="fade-up" data-aos-delay="100">The project utilized a modern data science stack for analysis, modeling, and visualization</p>
+            
+            <div class="row">
+                <div class="col-md-3 col-6 mb-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="tool-item content-wrapper">
+                        <h3>Python</h3>
+                        <p>Pandas, NumPy, Matplotlib, Seaborn</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-3 col-6 mb-4" data-aos="fade-up" data-aos-delay="250">
+                    <div class="tool-item content-wrapper">
+                        <h3>Machine Learning</h3>
+                        <p>Scikit-learn, XGBoost, SHAP, imbalanced-learn</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-3 col-6 mb-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="tool-item content-wrapper">
+                        <h3>Environment</h3>
+                        <p>Google Colab, Jupyter Notebooks</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-3 col-6 mb-4" data-aos="fade-up" data-aos-delay="350">
+                    <div class="tool-item content-wrapper">
+                        <h3>Visualization</h3>
+                        <p>SHAP plots, Matplotlib, Seaborn</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Insights Section -->
+    <section id="insights" class="insights">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Key Insights from Analysis</h2>
+            <p class="text-center mb-5 content-wrapper" data-aos="fade-up" data-aos-delay="100">The analysis revealed several critical factors influencing customer churn behavior</p>
+            
+            <div class="row mb-5">
+                <div class="col-lg-6 mb-4" data-aos="fade-right" data-aos-delay="100">
+                    <div class="insight-card content-wrapper">
+                        <h3><i class="fas fa-file-contract"></i> Contract Type is King</h3>
+                        <p>Month-to-month customers are over 300% more likely to churn than those on 2-year contracts. This was the strongest predictor of churn behavior, indicating the importance of long-term commitments for customer retention. Customers with one-year contracts show a moderate churn rate, suggesting that contract length has a direct correlation with customer loyalty.</p>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4" data-aos="fade-left" data-aos-delay="200">
+                    <div class="image-card">
+                        <img src="https://raw.githubusercontent.com/ArathiS1/Customer-Churn-Predictive-Modeling/main/results/Churn%20Rate%20by%20Contract%20type.png" alt="Churn Rate by Contract Type" onerror="this.src='https://via.placeholder.com/600x400/f8f9fa/6c757d?text=Image+Not+Found'">
+                        <div class="image-card-body content-wrapper">
+                            <h3>Churn Rate by Contract Type</h3>
+                            <p>Visualization showing the correlation between contract type and customer churn rate.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mb-5">
+                <div class="col-lg-6 mb-4 order-lg-2" data-aos="fade-left" data-aos-delay="100">
+                    <div class="insight-card content-wrapper">
+                        <h3><i class="fas fa-wifi"></i> The Fiber Optic Paradox</h3>
+                        <p>Customers with Fiber optic internet have a churn rate ~40% higher than DSL customers, suggesting potential service issues with premium offerings despite the higher speed and performance expectations. This counterintuitive finding indicates that customers paying premium prices for fiber optic service may have higher expectations that are not being met, leading to dissatisfaction and eventual churn.</p>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4 order-lg-1" data-aos="fade-right" data-aos-delay="200">
+                    <div class="image-card">
+                        <img src="https://raw.githubusercontent.com/ArathiS1/Customer-Churn-Predictive-Modeling/main/results/Churn%20Rate%20by%20Internet%20Service.png" alt="Churn Rate by Internet Service" onerror="this.src='https://via.placeholder.com/600x400/f8f9fa/6c757d?text=Image+Not+Found'">
+                        <div class="image-card-body content-wrapper">
+                            <h3>Churn Rate by Internet Service</h3>
+                            <p>Analysis of how different internet service types correlate with customer churn behavior.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mb-5">
+                <div class="col-lg-6 mb-4" data-aos="fade-right" data-aos-delay="100">
+                    <div class="insight-card content-wrapper">
+                        <h3><i class="fas fa-calendar-alt"></i> Tenure is Protective</h3>
+                        <p>Customers with less than 6 months tenure are ~4x more likely to churn than veterans with over 2 years, highlighting the importance of early retention efforts and onboarding experiences. The first few months of a customer relationship are critical for establishing loyalty, with churn risk decreasing significantly as tenure increases beyond the one-year mark.</p>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4" data-aos="fade-left" data-aos-delay="200">
+                    <div class="image-card">
+                        <img src="https://raw.githubusercontent.com/ArathiS1/Customer-Churn-Predictive-Modeling/main/results/Churn%20Rate%20by%20Tenure%20Bucket(months).png" alt="Churn Rate by Tenure Bucket" onerror="this.src='https://via.placeholder.com/600x400/f8f9fa/6c757d?text=Image+Not+Found'">
+                        <div class="image-card-body content-wrapper">
+                            <h3>Churn Rate by Tenure Bucket</h3>
+                            <p>Visual representation of how customer tenure affects churn rates across different time periods.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-lg-6 mb-4 order-lg-2" data-aos="fade-left" data-aos-delay="100">
+                    <div class="insight-card content-wrapper">
+                        <h3><i class="fas fa-project-diagram"></i> Feature Correlation Insights</h3>
+                        <p>The correlation heatmap revealed several important relationships: monthly charges show a positive correlation with churn, while services like tech support, online security, and device protection demonstrate negative correlations. Total charges, which represent customer lifetime value, show a strong negative correlation with churn, emphasizing the importance of retaining long-term, high-value customers.</p>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4 order-lg-1" data-aos="fade-right" data-aos-delay="200">
+                    <div class="image-card">
+                        <img src="https://raw.githubusercontent.com/ArathiS1/Customer-Churn-Predictive-Modeling/main/results/Correlation%20Heatmap.png" alt="Correlation Heatmap" onerror="this.src='https://via.placeholder.com/600x400/f8f9fa/6c757d?text=Image+Not+Found'">
+                        <div class="image-card-body content-wrapper">
+                            <h3>Correlation Heatmap</h3>
+                            <p>Heatmap visualization showing correlations between different features and churn.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-5" data-aos="zoom-in" data-aos-delay="300">
+                <div class="bg-light p-4 rounded shadow-sm">
+                    <div class="img-container">
+                        <img src="https://raw.githubusercontent.com/ArathiS1/Customer-Churn-Predictive-Modeling/main/results/SHAP%20value.png" alt="SHAP Analysis Results" onerror="this.src='https://via.placeholder.com/800x400/f8f9fa/6c757d?text=SHAP+Analysis+Image+Not+Found'">
+                    </div>
+                    <p class="mt-3 img-caption">SHAP analysis revealing feature importance for churn prediction</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Methodology Section -->
+    <section id="methodology" class="methodology">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Methodology & Process</h2>
+            <p class="text-center mb-5 content-wrapper" data-aos="fade-up" data-aos-delay="100">A comprehensive six-step approach was followed to ensure robust analysis and actionable results</p>
+            
+            <div class="process-step" data-aos="fade-right" data-aos-delay="200">
+                <div class="step-number">1</div>
+                <div class="step-content content-wrapper">
+                    <h3>Data Acquisition & Cleaning</h3>
+                    <p>Sourced customer data from a public Telco dataset. Engineered new features like avg_monthly_calc and handled missing values in TotalCharges. Performed comprehensive data quality checks and validation to ensure data integrity before analysis.</p>
+                </div>
+            </div>
+            
+            <div class="process-step" data-aos="fade-right" data-aos-delay="300">
+                <div class="step-number">2</div>
+                <div class="step-content content-wrapper">
+                    <h3>Exploratory Data Analysis (EDA)</h3>
+                    <p>Uncovered initial insights into key churn drivers like contract type and internet service through comprehensive visualization and statistical analysis. Identified patterns and correlations in the data that informed feature selection and model development.</p>
+                </div>
+            </div>
+            
+            <div class="process-step" data-aos="fade-right" data-aos-delay="400">
+                <div class="step-number">3</div>
+                <div class="step-content content-wrapper">
+                    <h3>Feature Engineering & Preprocessing</h3>
+                    <p>Built a robust pipeline to handle numeric and categorical features, including imputation, scaling, and one-hot encoding. Created new features that enhanced model performance and business interpretability, such as tenure buckets and interaction terms.</p>
+                </div>
+            </div>
+            
+            <div class="process-step" data-aos="fade-right" data-aos-delay="500">
+                <div class="step-number">4</div>
+                <div class="step-content content-wrapper">
+                    <h3>Predictive Modeling</h3>
+                    <p>Trained and evaluated multiple models including Logistic Regression, Random Forest, and XGBoost. A RandomForest classifier was optimized via GridSearch, achieving superior performance with an AUC of 0.85 and precision of 0.78 on the test set.</p>
+                </div>
+            </div>
+            
+            <div class="process-step" data-aos="fade-right" data-aos-delay="600">
+                <div class="step-number">5</div>
+                <div class="step-content content-wrapper">
+                    <h3>Model Interpretation</h3>
+                    <p>Used Permutation Importance and SHAP (SHapley Additive exPlanations) to explain the model's reasoning for each customer. This provided both global and local interpretability for business stakeholders, enabling trust in the model's predictions.</p>
+                </div>
+            </div>
+            
+            <div class="process-step" data-aos="fade-right" data-aos-delay="700">
+                <div class="step-number">6</div>
+                <div class="step-content content-wrapper">
+                    <h3>Deployment & Actionability</h3>
+                    <p>Scored customers and segmented them into risk deciles, enabling prioritized intervention and resource allocation. Developed a framework for ongoing monitoring and model retraining to maintain predictive performance as customer behavior evolves.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results Section -->
+    <section id="results" class="results">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Results & Business Impact</h2>
+            <p class="text-center mb-5 content-wrapper" data-aos="fade-up" data-aos-delay="100">The analysis provided clear, actionable insights that could directly inform customer retention strategy</p>
+            
+            <div class="row">
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="result-card content-wrapper">
+                        <h3><i class="fas fa-tachometer-alt"></i> High-Performance Predictor</h3>
+                        <p>The optimized RandomForest model achieved an ROC AUC of 0.85 and Average Precision of 0.65 on the test set, significantly outperforming baseline models and providing reliable churn predictions. The model successfully identified 78% of churn cases while maintaining a false positive rate below 20%.</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="result-card content-wrapper">
+                        <h3><i class="fas fa-key"></i> Key Drivers Identified</h3>
+                        <p>SHAP analysis revealed that contract type was the strongest predictor of churn. Higher monthly charges and the presence of Fiber optic service were also major contributors to customer attrition. Additional factors like tenure, lack of online security, and absence of tech support were identified as significant churn indicators.</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="400">
+                    <div class="result-card content-wrapper">
+                        <h3><i class="fas fa-bullseye"></i> Proactive Retention Enabled</h3>
+                        <p>The model successfully concentrated risk: Over 50% of all actual churn events came from the top 2 deciles (20% of customers), enabling a 2.5x increase in retention campaign efficiency. This targeted approach could potentially save millions annually by focusing resources on high-value at-risk customers.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recommendations Section -->
+    <section class="recommendations">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Strategic Recommendations</h2>
+            <p class="text-center mb-5 content-wrapper" data-aos="fade-up" data-aos-delay="100">Based on the analysis, these strategic initiatives can significantly reduce churn rates</p>
+            
+            <div class="row">
+                <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="recommendation-card content-wrapper">
+                        <h3><i class="fas fa-bullseye"></i> Targeted Interventions</h3>
+                        <p>Prioritize outreach to high-risk customers identified by the model (e.g., those in the top decile with month-to-month contracts). Develop personalized retention offers based on their usage patterns and reason for churn risk, such as customized discounts or service enhancements.</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="recommendation-card content-wrapper">
+                        <h3><i class="fas fa-box"></i> Product Bundling</h3>
+                        <p>Address the churn risk associated with Fiber optic by creating promoted bundles that include Tech Support or Online Security. Consider service quality improvements for fiber customers to enhance satisfaction and reduce the performance-expectation gap.</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="400">
+                    <div class="recommendation-card content-wrapper">
+                        <h3><i class="fas fa-award"></i> Loyalty Programs</h3>
+                        <p>Incentivize customers on month-to-month plans to switch to longer-term contracts through discounted pricing, exclusive features, or loyalty rewards programs. Focus on building long-term customer relationships through improved onboarding and engagement strategies.</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="500">
+                    <div class="recommendation-card content-wrapper">
+                        <h3><i class="fas fa-shield-alt"></i> Enhanced Support</h3>
+                        <p>Improve tech support services, particularly for fiber optic customers, to address potential service issues. Implement proactive support outreach to customers experiencing service disruptions or billing issues to prevent dissatisfaction from escalating to churn.</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="600">
+                    <div class="recommendation-card content-wrapper">
+                        <h3><i class="fas fa-bell"></i> Early Warning System</h3>
+                        <p>Implement an automated alert system that flags customers showing early signs of churn based on the predictive model. Enable customer service teams to intervene proactively with targeted retention offers before customers decide to cancel services.</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="700">
+                    <div class="recommendation-card content-wrapper">
+                        <h3><i class="fas fa-chart-line"></i> Continuous Monitoring</h3>
+                        <p>Establish a process for regularly retraining the model with new data to maintain predictive accuracy as customer behavior evolves. Implement A/B testing for retention strategies to continuously optimize approach based on empirical results.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-5" data-aos="fade-up" data-aos-delay="800">
+                <a href="https://github.com/ArathiS1/Customer-Churn-Predictive-Modeling/tree/main" class="btn" target="_blank">
+                    <i class="fab fa-github"></i> Explore Full Project on GitHub
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="social-links" data-aos="fade-up" data-aos-delay="100">
+                <a href="#"><i class="fab fa-github"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fas fa-envelope"></i></a>
+            </div>
+           
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- AOS JS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <!-- Custom JS -->
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+        
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('header');
+            if (window.scrollY > 50) {
+                navbar.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.1)';
+                navbar.style.background = 'rgba(255, 255, 255, 0.98)';
+            } else {
+                navbar.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
+                navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+            }
+        });
+
+        // Fallback for images
+        document.addEventListener('DOMContentLoaded', function() {
+            const images = document.querySelectorAll('img');
+            images.forEach(img => {
+                img.addEventListener('error', function() {
+                    this.src = 'https://via.placeholder.com/600x400/f8f9fa/6c757d?text=Image+Not+Found';
+                    this.alt = 'Image not available';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

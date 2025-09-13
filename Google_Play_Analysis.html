@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Play-Store Ecosystem Health & Predictive Intelligence Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <!-- AOS CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4285F4;
+            --secondary: #34A853;
+            --accent: #EA4335;
+            --light: #FBBC05;
+            --dark: #1a1a1a;
+            --light-bg: #f8f9fa;
+            --dark-bg: #242424;
+            --text-light: #f8f9fa;
+            --text-dark: #333;
+            --transition: all 0.3s ease;
+            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            --hover-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            color: var(--text-dark);
+            line-height: 1.6;
+            background-color: var(--light-bg);
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+        
+        p, li {
+            text-align: justify;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        /* Header & Navigation */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--text-light);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-icon {
+            margin-right: 10px;
+            font-size: 2rem;
+        }
+        
+        .navbar-nav .nav-link {
+            color: var(--text-light);
+            font-weight: 500;
+            transition: var(--transition);
+            padding: 0.5rem 1rem;
+            position: relative;
+        }
+        
+        .navbar-nav .nav-link:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 1rem;
+            background-color: var(--text-light);
+            transition: var(--transition);
+        }
+        
+        .navbar-nav .nav-link:hover:after {
+            width: calc(100% - 2rem);
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 10rem 0 5rem;
+            background: linear-gradient(rgba(66, 133, 244, 0.9), rgba(52, 168, 83, 0.8)), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23f8f9fa"/><path d="M0 0L100 100" stroke="%23e6e6e6" stroke-width="1"/><path d="M100 0L0 100" stroke="%23e6e6e6" stroke-width="1"/></svg>');
+            background-size: cover;
+            color: var(--text-light);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><path fill="%23ffffff" fill-opacity="0.1" d="M100,0 C155.228,0 200,44.772 200,100 C200,155.228 155.228,200 100,200 C44.772,200 0,155.228 0,100 C0,44.772 44.772,0 100,0 Z"></path></svg>') no-repeat center center;
+            background-size: cover;
+            opacity: 0.1;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            color: white;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .hero p {
+            font-size: 1.5rem;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            background-color: var(--light);
+            color: var(--dark);
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.3);
+            transition: var(--transition);
+            z-index: -1;
+        }
+        
+        .btn:hover:before {
+            width: 100%;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            background-color: #f9d342;
+        }
+        
+        /* Section Styling */
+        section {
+            padding: 5rem 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            position: relative;
+            display: inline-block;
+            padding-bottom: 1rem;
+        }
+        
+        .section-title h2:after {
+            content: '';
+            position: absolute;
+            width: 60%;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            bottom: 0;
+            left: 20%;
+            border-radius: 2px;
+        }
+        
+        /* Overview Section */
+        .overview-content {
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+        }
+        
+        .overview-text {
+            flex: 1;
+        }
+        
+        .overview-img {
+            flex: 1;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 300px;
+            background: white;
+        }
+        
+        .overview-img img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            transition: transform 0.5s ease;
+        }
+        
+        .overview-img:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+        
+        .overview-img:hover img {
+            transform: scale(1.03);
+        }
+        
+        /* Problem & Solution */
+        .problem-solution {
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .problem-solution::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
+        }
+        
+        .problem-solution .section-title h2 {
+            color: var(--text-light);
+        }
+        
+        .problem-solution .card {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 2rem;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            height: 100%;
+            color: var(--text-light);
+        }
+        
+        .problem-solution .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+        
+        .problem-solution .card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .problem-solution .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .problem-solution .card-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            color: var(--light);
+        }
+        
+        .problem-solution .card h3 {
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+        
+        .problem-solution .card ul {
+            padding-left: 1.5rem;
+        }
+        
+        .problem-solution .card li {
+            margin-bottom: 0.5rem;
+            text-align: left;
+        }
+        
+        /* Methodology */
+        .methodology-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            position: relative;
+            margin-left: 2rem;
+        }
+        
+        .methodology-steps:before {
+            content: '';
+            position: absolute;
+            left: -2rem;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+        
+        .step {
+            padding: 2rem;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: var(--card-shadow);
+            position: relative;
+            transition: var(--transition);
+        }
+        
+        .step:hover {
+            transform: translateX(10px);
+            box-shadow: var(--hover-shadow);
+        }
+        
+        .step-number {
+            position: absolute;
+            left: -3.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 2.5rem;
+            height: 2.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Results */
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .result-item {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .result-item::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+        
+        .result-item:hover::after {
+            transform: scaleX(1);
+        }
+        
+        .result-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+        
+        .result-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        /* Badges */
+        .badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 2rem 0;
+            justify-content: center;
+        }
+        
+        .badge {
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+        }
+        
+        .badge:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: var(--text-light);
+            padding: 3rem 0;
+            text-align: center;
+            position: relative;
+        }
+        
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+        }
+        
+        /* Stats section */
+        .stats-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        
+        .stat-item {
+            text-align: center;
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            font-size: 1.2rem;
+            color: var(--text-dark);
+        }
+        
+        /* Visualization placeholder */
+        .viz-placeholder {
+            background: white;
+            border-radius: 10px;
+            height: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 2rem 0;
+            box-shadow: var(--card-shadow);
+            position: relative;
+            overflow: hidden;
+            padding: 2rem;
+        }
+        
+        .viz-placeholder img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.5s ease;
+        }
+        
+        .viz-placeholder:hover img {
+            transform: scale(1.02);
+        }
+        
+        /* Strategic Recommendations */
+        .strategic-recommendations .card {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            height: 100%;
+        }
+        
+        .strategic-recommendations .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+        
+        .strategic-recommendations .card h4 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        /* Floating elements animation */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .floating {
+            animation: float 5s ease-in-out infinite;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .overview-content {
+                flex-direction: column;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1.2rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .methodology-steps {
+                margin-left: 0;
+            }
+            
+            .methodology-steps:before {
+                display: none;
+            }
+            
+            .step-number {
+                position: static;
+                margin-bottom: 1rem;
+                transform: none;
+            }
+            
+            .step:hover {
+                transform: translateY(-5px);
+            }
+            
+            .navbar-collapse {
+                background: linear-gradient(135deg, var(--primary), var(--secondary));
+                padding: 1rem;
+                border-radius: 10px;
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header & Navigation -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container">
+                <a class="navbar-brand" href="#">
+                    <i class="fab fa-google-play logo-icon"></i>
+                    Play Analytics
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#overview">Overview</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#problem">Problem</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#methodology">Methodology</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#results">Results</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1 data-aos="fade-down" data-aos-duration="1000">Google Play-Store Ecosystem Health & Predictive Analysis</h1>
+            <p data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">Identifying Success Drivers and At-Risk Applications | A Data Science Case Study</p>
+            <div class="badges" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="400">
+                <span class="badge"><i class="fab fa-python"></i> Python</span>
+                <span class="badge"><i class="fas fa-chart-line"></i> Pandas</span>
+                <span class="badge"><i class="fas fa-brain"></i> Scikit-learn</span>
+                <span class="badge"><i class="fas fa-project-diagram"></i> XGBoost</span>
+                <span class="badge"><i class="fas fa-robot"></i> SHAP</span>
+            </div>
+            <a href="https://github.com/ArathiS1/Google-play-ecosystem-analysis/tree/main" class="btn" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="600" target="_blank">
+                <i class="fab fa-github"></i> View GitHub Repository
+            </a>
+        </div>
+    </section>
+
+    <!-- Overview Section -->
+    <section id="overview" class="overview">
+        <div class="container">
+            <div class="section-title" data-aos="fade-up">
+                <h2>📖 Overview</h2>
+            </div>
+            <div class="overview-content">
+                <div class="overview-text" data-aos="fade-right">
+                    <p>This project delivers an end-to-end analytical framework to diagnose the health of the Google Play ecosystem and predict app success. By leveraging machine learning and sentiment analysis on over 1 million user reviews, this work provides actionable intelligence for platform strategy, developer success, and user satisfaction.</p>
+                    <p>The project combines advanced data science techniques with business intelligence to create a comprehensive understanding of what drives success in the Google Play ecosystem.</p>
+                    
+                    <div class="stats-container" data-aos="fade-up" data-aos-delay="200">
+                        <div class="stat-item">
+                            <div class="stat-number">1M+</div>
+                            <div class="stat-label">User Reviews Analyzed</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">10+</div>
+                            <div class="stat-label">Predictive Features</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">95%</div>
+                            <div class="stat-label">Model Accuracy</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="overview-img" data-aos="fade-left" data-aos-delay="400">
+                    <img src="https://github.com/ArathiS1/Google-play-store-ecosystem-analysis/raw/main/Assets/SHAP%20value.png" alt="SHAP Value Analysis" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem & Solution Section -->
+    <section id="problem" class="problem-solution">
+        <div class="container">
+            <div class="section-title" data-aos="fade-up">
+                <h2>🎯 Business Problem & Solution</h2>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="card">
+                        <div class="card-icon">
+                            <i class="fas fa-question-circle"></i>
+                        </div>
+                        <h3>Business Problem</h3>
+                        <p>The Google Play Store team needs to move from reactive metrics to a proactive strategy. The core challenge is threefold:</p>
+                        <ul>
+                            <li>For Google: How can we identify high-potential apps to promote and at-risk apps to support before they churn?</li>
+                            <li>For Developers: What are the data-driven levers that truly influence an app's success?</li>
+                            <li>For Users: How can we improve app discovery to surface higher quality applications?</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4" data-aos="fade-up" data-aos-delay="400">
+                    <div class="card">
+                        <div class="card-icon">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <h3>Solution & Objectives</h3>
+                        <p>This project answers these questions by:</p>
+                        <ul>
+                            <li>Ingesting and rigorously cleaning large-scale datasets</li>
+                            <li>Performing deep Exploratory Data Analysis (EDA)</li>
+                            <li>Engineering a machine learning model (XGBoost)</li>
+                            <li>Developing an Early Warning System for at-risk apps</li>
+                            <li>Translating insights into strategic, actionable intelligence</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Methodology Section -->
+    <section id="methodology" class="methodology">
+        <div class="container">
+            <div class="section-title" data-aos="fade-up">
+                <h2>⚙️ Methodology & Process</h2>
+            </div>
+            <div class="methodology-steps">
+                <div class="step" data-aos="fade-right">
+                    <div class="step-number">1</div>
+                    <h3>Data Acquisition & Cleaning</h3>
+                    <p>Sourced datasets from Kaggle. Executed large-scale data wrangling: handled missing values, corrected data types, and standardized categorical variables.</p>
+                </div>
+                <div class="step" data-aos="fade-right" data-aos-delay="100">
+                    <div class="step-number">2</div>
+                    <h3>Sentiment Analysis at Scale</h3>
+                    <p>Processed over 1 million user reviews. Utilized VADER Sentiment Analysis to score each review's polarity and aggregated scores per app.</p>
+                </div>
+                <div class="step" data-aos="fade-right" data-aos-delay="200">
+                    <div class="step-number">3</div>
+                    <h3>Exploratory Data Analysis (EDA)</h3>
+                    <p>Uncovered foundational insights about the app ecosystem: correlations between rating and installs, distribution across categories, and impact of update frequency.</p>
+                </div>
+                <div class="step" data-aos="fade-right" data-aos-delay="300">
+                    <div class="step-number">4</div>
+                    <h3>Feature Engineering</h3>
+                    <p>Created powerful predictive features: High_Success target variable, log transforms, binary features, and simplified categorical variables.</p>
+                </div>
+                <div class="step" data-aos="fade-right" data-aos-delay="400">
+                    <div class="step-number">5</div>
+                    <h3>Predictive Modeling</h3>
+                    <p>Built a robust model pipeline using ColumnTransformer. Trained and evaluated an XGBoost Classifier, achieving a high ROC-AUC score.</p>
+                </div>
+                <div class="step" data-aos="fade-right" data-aos-delay="500">
+                    <div class="step-number">6</div>
+                    <h3>Model Interpretability with SHAP</h3>
+                    <p>Used SHAP to demystify the model and identify the most important drivers of app success.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results Section -->
+    <section id="results" class="results">
+        <div class="container">
+            <div class="section-title" data-aos="fade-up">
+                <h2>📊 Results & Business Impact</h2>
+            </div>
+            <div class="results-grid">
+                <div class="result-item" data-aos="fade-up" data-aos-delay="200">
+                    <div class="result-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Rating is the #1 Success Driver</h3>
+                    <p>SHAP analysis confirmed that Rating is the most critical feature for predicting success. For Developers: Provides an undeniable focus on quality and user experience.</p>
+                </div>
+                <div class="result-item" data-aos="fade-up" data-aos-delay="300">
+                    <div class="result-icon">
+                        <i class="fas fa-comment-alt"></i>
+                    </div>
+                    <h3>User Sentiment is a Leading Indicator</h3>
+                    <p>avg_polarity was a top-3 predictive feature. Apps with sentiment score below -0.1 are at high risk. For Google: Allows proactive support of struggling apps.</p>
+                </div>
+                <div class="result-item" data-aos="fade-up" data-aos-delay="400">
+                    <div class="result-icon">
+                        <i class="fas fa-sync-alt"></i>
+                    </div>
+                    <h3>Maintenance Matters</h3>
+                    <p>Apps that are regularly updated maintain higher ratings and success probabilities. For All: Reinforces the need for ongoing investment post-launch.</p>
+                </div>
+            </div>
+            
+            <div class="strategic-recommendations" data-aos="fade-up" data-aos-delay="500" style="margin-top: 3rem;">
+                <h3 style="text-align: center; margin-bottom: 1.5rem;">Strategic Recommendations</h3>
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                            <h4>For Google</h4>
+                            <p>Launch a "Developer Partnership" program targeting apps on the early warning list. Offer dedicated support and resources to improve their quality and retention.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                            <h4>For Developers</h4>
+                            <p>Publish a "Play Store Playbook" based on these findings. Educate developers on maintaining high ratings and regular updates.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                            <h4>For the Algorithm</h4>
+                            <p>Weight the app discovery algorithm more heavily on sentiment trends and update frequency to surface higher-quality apps to users.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="logo">
+                    <i class="fab fa-google-play logo-icon"></i>
+                    <span>Play Analytics</span>
+                </div>
+                <p>Google Play Ecosystem Health & Predictive Intelligence Dashboard</p>
+                
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- AOS JS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <!-- Custom JS -->
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            once: true,
+            offset: 100,
+        });
+        
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

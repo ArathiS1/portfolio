@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Market Position Analysis</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <!-- AOS CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4285F4;
+            --secondary: #34A853;
+            --accent1: #EA4335;
+            --accent2: #FBBC05;
+            --dark: #202124;
+            --light: #f8f9fa;
+            --gray: #5f6368;
+            --light-gray: #dadce0;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--dark);
+            line-height: 1.6;
+            background-color: var(--light);
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4, h5 {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .navbar {
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1rem 0;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+        
+        .navbar-brand span {
+            color: var(--primary);
+        }
+        
+        .nav-link {
+            font-weight: 500;
+            position: relative;
+        }
+        
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--primary);
+            transition: width 0.3s;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary);
+        }
+        
+        .nav-link:hover:after {
+            width: 100%;
+        }
+        
+        .hero {
+            padding: 8rem 0 5rem;
+            text-align: center;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            position: relative;
+        }
+        
+        .hero:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%234285f4' fill-opacity='0.03' d='M0,128L48,117.3C96,107,192,85,288,112C384,139,480,213,576,218.7C672,224,768,160,864,138.7C960,117,1056,139,1152,149.3C1248,160,1344,160,1392,160L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E");
+            background-size: cover;
+            opacity: 0.5;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--gray);
+            max-width: 800px;
+            margin: 0 auto 2rem;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            padding: 0.8rem 1.8rem;
+            font-weight: 600;
+        }
+        
+        .btn-outline-primary {
+            border-color: var(--primary);
+            color: var(--primary);
+            padding: 0.8rem 1.8rem;
+            font-weight: 600;
+        }
+        
+        .btn-primary:hover, .btn-outline-primary:hover {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(66, 133, 244, 0.2);
+        }
+        
+        .badge {
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .badge-powerbi {
+            background-color: #F2C811;
+            color: black;
+        }
+        
+        .badge-analysis {
+            background-color: #0078D4;
+            color: white;
+        }
+        
+        .badge-sql {
+            background-color: #CC2927;
+            color: white;
+        }
+        
+        .badge-github {
+            background-color: #100000;
+            color: white;
+        }
+        
+        section {
+            padding: 5rem 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .section-title h2 {
+            position: relative;
+            display: inline-block;
+            padding-bottom: 1rem;
+        }
+        
+        .section-title h2:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background-color: var(--primary);
+        }
+        
+        .section-title p {
+            color: var(--gray);
+            max-width: 700px;
+            margin: 1.5rem auto 0;
+        }
+        
+        .card {
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            height: 100%;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .insight-card h3 {
+            color: var(--primary);
+        }
+        
+        .results-table {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .results-table thead {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .trend-up {
+            color: var(--secondary);
+        }
+        
+        .trend-down {
+            color: var(--accent1);
+        }
+        
+        .trend-stable {
+            color: var(--accent2);
+        }
+        
+        .dashboard-img {
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        
+        .dashboard-img:hover {
+            transform: scale(1.02);
+        }
+        
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary) 0%, #3367D6 100%);
+            color: white;
+        }
+        
+        footer {
+            background-color: var(--dark);
+            color: white;
+        }
+        
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--accent2);
+        }
+        
+        .data-disclaimer {
+            background-color: #fff8e1;
+            border-left: 4px solid var(--accent2);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hero {
+                padding: 7rem 0 4rem;
+            }
+            
+            .hero h1 {
+                font-size: 2.3rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fa-brands fa-google me-2"></i>Market <span>Analysis</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#overview">Overview</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#problem">Problem</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#methodology">Methodology</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#results">Results</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#insights">Insights</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container position-relative">
+            <h1 data-aos="fade-up"><span class="google">Google</span> Market Position Analysis</h1>
+            <p data-aos="fade-up" data-aos-delay="100">A comprehensive data-driven analysis of Google's market share trends across core and emerging product lines to assess business health and strategic positioning.</p>
+            <div data-aos="fade-up" data-aos-delay="200" class="mb-4">
+                <a href="https://github.com/ArathiS1/Google-Market-Position-Analysis/tree/main" class="btn btn-primary me-2" target="_blank">
+                    <i class="fab fa-github me-2"></i>View Project Repository
+                </a>
+                <a href="#overview" class="btn btn-outline-primary">Explore Analysis</a>
+            </div>
+            <div class="badges" data-aos="fade-up" data-aos-delay="300">
+                <span class="badge badge-powerbi me-2 mb-2">
+                    <i class="fas fa-chart-bar me-1"></i> Power BI
+                </span>
+                <span class="badge badge-analysis me-2 mb-2">
+                    <i class="fas fa-chart-line me-1"></i> Data Analysis
+                </span>
+                <span class="badge badge-sql me-2 mb-2">
+                    <i class="fas fa-database me-1"></i> SQL
+                </span>
+                <span class="badge badge-github mb-2">
+                    <i class="fab fa-github me-1"></i> GitHub
+                </span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overview Section -->
+    <section id="overview" class="bg-white">
+        <div class="container">
+            <div class="section-title" data-aos="fade-up">
+                <h2>Project Overview</h2>
+                <p>Comprehensive Market Intelligence: A multi-faceted analysis of Google's market share trends</p>
+            </div>
+            
+            <div class="row justify-content-center mb-5">
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="card h-100 text-center p-4">
+                        <i class="fas fa-bullseye card-icon"></i>
+                        <h3>Objective</h3>
+                        <p class="text-muted">To holistically analyze Google's market position by visualizing and interpreting year-over-year share trends for its key products, determining whether its overall stance is strengthening or weakening.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="card h-100 text-center p-4">
+                        <i class="fas fa-tools card-icon"></i>
+                        <h3>Solution</h3>
+                        <p class="text-muted">Developed an interactive Power BI Dashboard that synthesizes four distinct market share datasets into a single pane of glass, providing real-time views, visual trend analysis, and competitor comparisons.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="card h-100 text-center p-4">
+                        <i class="fas fa-chart-pie card-icon"></i>
+                        <h3>Impact</h3>
+                        <p class="text-muted">Provides clear, evidence-based guidance for strategic investment decisions, highlighting both strengths in core business and critical vulnerabilities in emerging technologies like AI.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section-title mt-5" data-aos="fade-up">
+                <h2>Market Analysis Dashboards</h2>
+                <p>Interactive visualizations showing Google's market position across key product categories</p>
+            </div>
+            
+            <div class="row">
+                <div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h4 class="card-title">Search Engine Market Share</h4>
+                            <p class="card-text">Analysis of Google's dominance in the search engine market compared to competitors like Bing and others.</p>
+                            <img src="https://github.com/ArathiS1/Google-Market-Position-Analysis/blob/main/Assets/Search%20Engine%20Market%20Share.png?raw=true" alt="Search Engine Market Share" class="img-fluid dashboard-img">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h4 class="card-title">AI Chatbot Market Share</h4>
+                            <p class="card-text">Comparison of Google's Gemini AI against competitors like ChatGPT and Claude in the rapidly evolving AI chatbot market.</p>
+                            <img src="https://github.com/ArathiS1/Google-Market-Position-Analysis/blob/main/Assets/AI%20Chatbot%20Market%20Share.png?raw=true" alt="AI Chatbot Market Share" class="img-fluid dashboard-img">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h4 class="card-title">Browser Market Share</h4>
+                            <p class="card-text">Evaluation of Chrome's position in the browser market against competitors like Safari, Edge, and others.</p>
+                            <img src="https://github.com/ArathiS1/Google-Market-Position-Analysis/blob/main/Assets/Browser%20Market%20Share.png?raw=true" alt="Browser Market Share" class="img-fluid dashboard-img">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="400">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h4 class="card-title">Mobile Vendor Market Share</h4>
+                            <p class="card-text">Analysis of Google Pixel's position in the highly competitive smartphone market against Apple, Samsung, and others.</p>
+                            <img src="https://github.com/ArathiS1/Google-Market-Position-Analysis/blob/main/Assets/Mobile%20Vendor%20Market%20Share.png?raw=true" alt="Mobile Vendor Market Share" class="img-fluid dashboard-img">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="data-disclaimer p-3 mt-4 rounded" data-aos="fade-up">
+                <p class="mb-0"><strong>Data Disclaimer:</strong> All data presented in these visualizations is sourced from publicly available market research reports and is intended for analytical purposes only. Actual market positions may vary based on different reporting methodologies and time periods.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section id="problem" class="bg-light">
+        <div class="container">
+            <div class="section-title" data-aos="fade-up">
+                <h2>Business Problem</h2>
+                <p>Understanding Google's market position in an increasingly competitive tech landscape</p>
+            </div>
+            
+            <div class="row align-items-center">
+                <div class="col-lg-6" data-aos="fade-right">
+                    <div class="card p-4">
+                        <h3 class="mb-3">The Challenge</h3>
+                        <p>Google's market position is multifaceted, with dominance in some areas and significant challenges in others. Without a consolidated view of these trends, strategic decisions risk being made on incomplete information.</p>
+                        
+                        <h4 class="mt-4">Key Questions:</h4>
+                        <ul>
+                            <li>Is Google maintaining its dominance in core markets like search and browsers?</li>
+                            <li>How is Google performing in emerging markets like AI and mobile hardware?</li>
+                            <li>Which competitors pose the greatest threat in each market segment?</li>
+                            <li>Where should Google focus its strategic investments to maintain and grow market share?</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-6" data-aos="fade-left">
+                    <div class="card p-4">
+                        <h3 class="mb-3">Strategic Importance</h3>
+                        <p>Understanding these market dynamics is crucial for:</p>
+                        
+                        <div class="d-flex align-items-start mb-3">
+                            <i class="fas fa-arrow-trend-up me-3 mt-1 text-primary"></i>
+                            <div>
+                                <h5 class="mb-1">Resource Allocation</h5>
+                                <p class="mb-0">Directing investments toward areas with the highest growth potential</p>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex align-items-start mb-3">
+                            <i class="fas fa-shield-alt me-3 mt-1 text-primary"></i>
+                            <div>
+                                <h5 class="mb-1">Competitive Defense</h5>
+                                <p class="mb-0">Protecting core revenue streams from emerging threats</p>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex align-items-start mb-3">
+                            <i class="fas fa-chess-knight me-3 mt-1 text-primary"></i>
+                            <div>
+                                <h5 class="mb-1">Strategic Offense</h5>
+                                <p class="mb-0">Identifying opportunities to capture market share in emerging categories</p>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex align-items-start">
+                            <i class="fas fa-chart-line me-3 mt-1 text-primary"></i>
+                            <div>
+                                <h5 class="mb-1">Investor Confidence</h5>
+                                <p class="mb-0">Demonstrating a clear understanding of market position and growth strategy</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results Section -->
+    <section id="results" class="bg-white">
+        <div class="container">
+            <div class="section-title" data-aos="fade-up">
+                <h2>Key Findings</h2>
+                <p>Data-driven insights into Google's market position across product categories</p>
+            </div>
+            
+            <div class="row">
+                <div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h4 class="card-title">Search Engine Dominance</h4>
+                            <p class="card-text">Google maintains overwhelming dominance in the search engine market, consistently holding over 90% market share globally.</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="mb-0">Market Share</h5>
+                                    <p class="mb-0 text-muted">Global average</p>
+                                </div>
+                                <span class="badge bg-success">92.5%</span>
+                            </div>
+                            <div class="progress mt-3" style="height: 10px;">
+                                <div class="progress-bar bg-success" role="progressbar" style="width: 92.5%" aria-valuenow="92.5" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h4 class="card-title">AI Chatbot Position</h4>
+                            <p class="card-text">Google's Gemini faces significant competition in the AI chatbot space, with ChatGPT maintaining a strong lead.</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="mb-0">Market Share</h5>
+                                    <p class="mb-0 text-muted">Q2 2023</p>
+                                </div>
+                                <span class="badge bg-warning text-dark">18.3%</span>
+                            </div>
+                            <div class="progress mt-3" style="height: 10px;">
+                                <div class="progress-bar bg-warning" role="progressbar" style="width: 18.3%" aria-valuenow="18.3" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h4 class="card-title">Browser Market Leadership</h4>
+                            <p class="card-text">Chrome continues to lead the browser market with a strong majority share, though facing pressure on mobile devices.</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="mb-0">Market Share</h5>
+                                    <p class="mb-0 text-muted">Global average</p>
+                                </div>
+                                <span class="badge bg-success">64.3%</span>
+                            </div>
+                            <div class="progress mt-3" style="height: 10px;">
+                                <div class="progress-bar bg-success" role="progressbar" style="width: 64.3%" aria-valuenow="64.3" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="400">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h4 class="card-title">Mobile Hardware Challenge</h4>
+                            <p class="card-text">Google's Pixel devices continue to struggle against dominant players like Apple and Samsung in the smartphone market.</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="mb-0">Market Share</h5>
+                                    <p class="mb-0 text-muted">Global smartphone sales</p>
+                                </div>
+                                <span class="badge bg-danger">2.7%</span>
+                            </div>
+                            <div class="progress mt-3" style="height: 10px;">
+                                <div class="progress-bar bg-danger" role="progressbar" style="width: 2.7%" aria-valuenow="2.7" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Insights Section -->
+    <section id="insights" class="bg-light">
+        <div class="container">
+            <div class="section-title" data-aos="fade-up">
+                <h2>Strategic Insights</h2>
+                <p>Actionable recommendations based on market analysis</p>
+            </div>
+            
+            <div class="row">
+                <div class="col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="card insight-card h-100">
+                        <div class="card-body">
+                            <h3>Defend Core Strengths</h3>
+                            <p>Google should continue investing in its dominant search and browser products, which serve as foundational revenue generators and user acquisition channels.</p>
+                            <ul>
+                                <li>Maintain search quality leadership</li>
+                                <li>Enhance Chrome's privacy features</li>
+                                <li>Integrate AI capabilities into core products</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="card insight-card h-100">
+                        <div class="card-body">
+                            <h3>Accelerate AI Investment</h3>
+                            <p>Google needs to significantly increase its investment and focus on AI technologies to compete effectively with OpenAI and other emerging competitors.</p>
+                            <ul>
+                                <li>Expand Gemini's capabilities</li>
+                                <li>Improve AI integration across products</li>
+                                <li>Develop specialized AI solutions for enterprise</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="card insight-card h-100">
+                        <div class="card-body">
+                            <h3>Reassess Mobile Strategy</h3>
+                            <p>Google should reconsider its mobile hardware strategy, either through significant investment to compete directly or through partnerships to leverage its Android ecosystem.</p>
+                            <ul>
+                                <li>Differentiate Pixel with AI capabilities</li>
+                                <li>Strengthen carrier partnerships</li>
+                                <li>Focus on specific market segments</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section text-white">
+        <div class="container text-center">
+            <h2 data-aos="fade-up">Explore the Full Analysis</h2>
+            <p class="mb-4" data-aos="fade-up" data-aos-delay="100">Dive deeper into the data and methodology behind these insights</p>
+            <a href="https://github.com/ArathiS1/Google-Market-Position-Analysis/tree/main" class="btn btn-light btn-lg" target="_blank" data-aos="fade-up" data-aos-delay="200">
+                <i class="fab fa-github me-2"></i>View Project on GitHub
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <h5 class="text-white mb-3">Google Market Position Analysis</h5>
+                    <p class="text-muted">A data-driven analysis of Google's market share across core and emerging product categories.</p>
+                </div>
+                <div class="col-lg-3 mb-4 mb-lg-0">
+                    <h5 class="text-white mb-3">Quick Links</h5>
+                    <ul class="list-unstyled footer-links">
+                        <li><a href="#overview"><i class="fas fa-chevron-right me-2 small"></i>Overview</a></li>
+                        <li><a href="#problem"><i class="fas fa-chevron-right me-2 small"></i>Problem</a></li>
+                        <li><a href="#methodology"><i class="fas fa-chevron-right me-2 small"></i>Methodology</a></li>
+                        <li><a href="#results"><i class="fas fa-chevron-right me-2 small"></i>Results</a></li>
+                    </ul>
+                </div>
+                
+            </div>
+            <hr class="my-4 bg-secondary">
+            <div class="row align-items-center">
+                <div class="col-md-6 text-center text-md-start">
+                    <p class="text-muted mb-0">&copy; 2023 Google Market Position Analysis. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <p class="text-muted mb-0">Designed with <i class="fas fa-heart text-danger"></i> for data enthusiasts</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- AOS JS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <!-- Custom JS -->
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: true
+        });
+        
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('shadow-sm');
+            } else {
+                navbar.classList.remove('shadow-sm');
+            }
+        });
+    </script>
+</body>
+</html>

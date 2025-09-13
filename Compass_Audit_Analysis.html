@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COMPAS Algorithm Audit | Google AI Principles Evaluation</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <!-- AOS CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/3b161c540c.js" crossorigin="anonymous"></script>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --gray: #7f8c8d;
+            --gradient-start: #3498db;
+            --gradient-end: #2c3e50;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            color: #333;
+            line-height: 1.6;
+            background-color: #f9f9f9;
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4, h5 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        p {
+            margin-bottom: 1.5rem;
+        }
+        
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+            color: white;
+            padding: 0;
+            position: relative;
+            overflow: hidden;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 2;
+            padding: 6rem 0;
+            text-align: center;
+        }
+        
+        .header-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.05;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100"><circle cx="50" cy="50" r="40" stroke="white" stroke-width="2" fill="none" /><path d="M50 10 A40 40 0 0 1 90 50" stroke="white" stroke-width="1" fill="none" /><path d="M50 10 A40 40 0 0 0 10 50" stroke="white" stroke-width="1" fill="none" /></svg>');
+            background-size: 200px;
+        }
+        
+        /* Particles Background */
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
+        
+        /* Navigation */
+        nav {
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            padding: 0.5rem 0;
+            backdrop-filter: blur(5px);
+        }
+        
+        .logo {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-icon {
+            margin-right: 0.5rem;
+            font-size: 1.8rem;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: var(--secondary);
+            transition: width 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--secondary);
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        
+        /* Sections */
+        section {
+            padding: 6rem 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            position: relative;
+            display: inline-block;
+            padding-bottom: 1rem;
+        }
+        
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--secondary);
+            border-radius: 2px;
+        }
+        
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+            height: 100%;
+            border-top: 4px solid var(--secondary);
+        }
+        
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+        
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            background: var(--light);
+            color: var(--gray);
+            border: 1px solid #e0e0e0;
+        }
+        
+        .badge-tableau {
+            background-color: rgba(255, 140, 0, 0.1);
+            color: #ff8c00;
+            border-color: rgba(255, 140, 0, 0.2);
+        }
+        
+        .badge-python {
+            background-color: rgba(48, 105, 152, 0.1);
+            color: #306998;
+            border-color: rgba(48, 105, 152, 0.2);
+        }
+        
+        .badge-github {
+            background-color: rgba(51, 51, 51, 0.1);
+            color: #333;
+            border-color: rgba(51, 51, 51, 0.2);
+        }
+        
+        .badge-fairness {
+            background-color: rgba(39, 174, 96, 0.1);
+            color: #27ae60;
+            border-color: rgba(39, 174, 96, 0.2);
+        }
+        
+        /* Principles */
+        .principle {
+            padding: 2rem;
+            border-radius: 12px;
+            background-color: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-left: 4px solid var(--secondary);
+            height: 100%;
+        }
+        
+        .principle:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+        
+        .principle h3 {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .principle i {
+            margin-right: 1rem;
+            color: var(--secondary);
+            font-size: 1.5rem;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(52, 152, 219, 0.1);
+            border-radius: 50%;
+        }
+        
+        /* Findings */
+        .finding {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 2.5rem;
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .finding:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+        
+        .finding-number {
+            background: linear-gradient(135deg, var(--secondary) 0%, #2980b9 100%);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 1.5rem;
+            flex-shrink: 0;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+        }
+        
+        /* Recommendations */
+        .recommendation {
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            background-color: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-top: 4px solid var(--success);
+        }
+        
+        .recommendation:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+        
+        .recommendation h3 {
+            display: flex;
+            align-items: center;
+            color: var(--success);
+        }
+        
+        .recommendation i {
+            margin-right: 1rem;
+            font-size: 1.5rem;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 4rem 0 2rem;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+        
+        .footer-links a {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .social-icons {
+            display: flex;
+            margin-top: 1.5rem;
+        }
+        
+        .social-icons a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+            margin-right: 1rem;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        
+        .social-icons a:hover {
+            background-color: var(--secondary);
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+        
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 0.9rem 2rem;
+            background-color: var(--secondary);
+            color: white;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .btn:hover {
+            background-color: #2980b9;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(52, 152, 219, 0.4);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--secondary);
+            color: var(--secondary);
+            box-shadow: none;
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--secondary);
+            color: white;
+        }
+        
+        /* Hero */
+        .hero {
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            color: white;
+        }
+        
+        .hero p {
+            font-size: 1.35rem;
+            margin-bottom: 2.5rem;
+            color: rgba(255,255,255,0.9);
+        }
+        
+        /* Stats */
+        .stats {
+            display: flex;
+            justify-content: center;
+            margin: 3rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 0 2rem;
+            margin: 1rem 0;
+            position: relative;
+        }
+        
+        .stat-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 40px;
+            width: 2px;
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: rgba(255,255,255,0.8);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* Dashboard Image */
+        .dashboard-img {
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            transition: transform 0.3s;
+            width: 100%;
+            margin: 2rem 0;
+        }
+        
+        .dashboard-img:hover {
+            transform: scale(1.02);
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+            
+            .stat-item {
+                padding: 0 1.5rem;
+            }
+            
+            .stat-number {
+                font-size: 2rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .section-title h2 {
+                font-size: 2rem;
+            }
+            
+            .stat-item:not(:last-child)::after {
+                display: none;
+            }
+            
+            .stat-item {
+                width: 50%;
+            }
+            
+            header {
+                min-height: 80vh;
+            }
+            
+            .finding {
+                flex-direction: column;
+            }
+            
+            .finding-number {
+                margin-bottom: 1rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .card, .principle, .finding, .recommendation {
+                padding: 1.5rem;
+            }
+            
+            .stat-item {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center py-2">
+                <div class="logo">
+                    <span class="logo-icon"><i class="fas fa-chart-line"></i></span>
+                    COMPAS Audit
+                </div>
+                <ul class="nav-links d-flex list-unstyled mb-0">
+                    <li class="ms-3"><a href="#overview">Overview</a></li>
+                    <li class="ms-3"><a href="#methodology">Methodology</a></li>
+                    <li class="ms-3"><a href="#principles">AI Principles</a></li>
+                    <li class="ms-3"><a href="#findings">Findings</a></li>
+                    <li class="ms-3"><a href="#recommendations">Recommendations</a></li>
+                    <li class="ms-3"><a href="#github">GitHub</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header with Particles -->
+    <header>
+        <div id="particles-js"></div>
+        <div class="header-bg"></div>
+        <div class="container header-content">
+            <div class="hero" data-aos="fade-up" data-aos-duration="1000">
+                <h1>COMPAS Algorithm Audit</h1>
+                <p>Evaluating the COMPAS recidivism algorithm against Google's AI Principles for fairness, accountability, and transparency</p>
+                <div class="stats">
+                    <div class="stat-item" data-aos="fade-up" data-aos-delay="200">
+                        <div class="stat-number">5</div>
+                        <div class="stat-label">AI Principles</div>
+                    </div>
+                    <div class="stat-item" data-aos="fade-up" data-aos-delay="300">
+                        <div class="stat-number">7</div>
+                        <div class="stat-label">Key Findings</div>
+                    </div>
+                    <div class="stat-item" data-aos="fade-up" data-aos-delay="400">
+                        <div class="stat-number">6</div>
+                        <div class="stat-label">Recommendations</div>
+                    </div>
+                </div>
+                <a href="#overview" class="btn" data-aos="fade-up" data-aos-delay="500">Explore Audit</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Overview Section -->
+    <section id="overview">
+        <div class="container">
+            <div class="section-title" data-aos="fade-up">
+                <h2>Project Overview</h2>
+                <p>Understanding the COMPAS algorithm and its implications</p>
+            </div>
+            <div class="row">
+                <div class="col-lg-6" data-aos="fade-right">
+                    <div class="card">
+                        <h3>What is COMPAS?</h3>
+                        <p>COMPAS (Correctional Offender Management Profiling for Alternative Sanctions) is a case management and decision support tool developed by Northpointe (now Equivant) used by U.S. courts to assess the likelihood of a defendant becoming a recidivist.</p>
+                        <p>The algorithm uses a proprietary method to assign scores that predict the risk of recidivism, which has been used to inform decisions about bail, sentencing, and parole.</p>
+                        <div class="mt-3">
+                            <span class="badge badge-tableau">Tableau</span>
+                            <span class="badge badge-python">Python</span>
+                            <span class="badge badge-github">GitHub</span>
+                            <span class="badge badge-fairness">Fairness Analysis</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6" data-aos="fade-left">
+                    <div class="card">
+                        <h3>Audit Objectives</h3>
+                        <p>This comprehensive audit evaluates the COMPAS algorithm against Google's AI Principles to assess its fairness, accountability, and transparency.</p>
+                        <p>The analysis includes statistical evaluation of the algorithm's predictive performance across different demographic groups and an assessment of its compliance with ethical AI principles.</p>
+                        <ul>
+                            <li>Evaluate fairness across racial and gender groups</li>
+                            <li>Assess transparency and interpretability</li>
+                            <li>Review accountability measures</li>
+                            <li>Provide recommendations for improvement</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard Image Section -->
+    <section id="dashboard" class="bg-light">
+        <div class="container">
+            <div class="section-title" data-aos="fade-up">
+                <h2>Master Audit Dashboard</h2>
+                <p>Interactive dashboard for exploring COMPAS algorithm analysis</p>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-lg-10" data-aos="zoom-in">
+                    <img src="https://github.com/ArathiS1/COMPAS-Algorithm-Audit/blob/main/Images/Master%20Audit%20Dashboard.png?raw=true" alt="COMPAS Algorithm Audit Dashboard" class="dashboard-img">
+                </div>
+                <div class="col-lg-8 text-center mt-4" data-aos="fade-up">
+                    <p>The Master Audit Dashboard provides a comprehensive visualization of the COMPAS algorithm's performance metrics, fairness analysis, and demographic breakdowns.</p>
+                    <a href="https://github.com/ArathiS1/COMPAS-Algorithm-Audit" class="btn btn-outline mt-2" target="_blank">View on GitHub</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Methodology Section -->
+    <section id="methodology">
+        <div class="container">
+            <div class="section-title" data-aos="fade-up">
+                <h2>Methodology</h2>
+                <p>Our approach to evaluating the COMPAS algorithm</p>
+            </div>
+            <div class="row">
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="card text-center h-100">
+                        <i class="fas fa-database fa-3x mb-3" style="color: var(--secondary);"></i>
+                        <h3>Data Collection</h3>
+                        <p>Gathered COMPAS recidivism risk scores and demographic data from Broward County, Florida, including over 7,000 criminal defendants from 2013-2014.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="card text-center h-100">
+                        <i class="fas fa-chart-bar fa-3x mb-3" style="color: var(--secondary);"></i>
+                        <h3>Statistical Analysis</h3>
+                        <p>Performed comprehensive analysis including confusion matrices, ROC curves, and fairness metrics to evaluate predictive performance across demographic groups.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="card text-center h-100">
+                        <i class="fas fa-balance-scale fa-3x mb-3" style="color: var(--secondary);"></i>
+                        <h3>Principle Evaluation</h3>
+                        <p>Assessed the algorithm against each of Google's AI Principles using both quantitative metrics and qualitative analysis.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Principles Section -->
+    <section id="principles" class="bg-light">
+        <div class="container">
+            <div class="section-title" data-aos="fade-up">
+                <h2>Google's AI Principles</h2>
+                <p>Evaluating COMPAS against ethical AI guidelines</p>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="principle">
+                        <h3><i class="fas fa-users"></i> Be Socially Beneficial</h3>
+                        <p>AI should benefit society and avoid creating or reinforcing unfair bias. The COMPAS algorithm's impact on marginalized communities raises concerns about its social benefit.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="principle">
+                        <h3><i class="fas fa-balance-scale"></i> Avoid Creating or Reinforcing Unfair Bias</h3>
+                        <p>AI systems should be designed to avoid unfair bias. Our analysis shows significant racial disparities in COMPAS's false positive rates.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="principle">
+                        <h3><i class="fas fa-shield-alt"></i> Be Built and Tested for Safety</h3>
+                        <p>AI systems should be robustly tested to ensure safety. COMPAS's proprietary nature makes independent safety verification difficult.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="400">
+                    <div class="principle">
+                        <h3><i class="fas fa-gavel"></i> Be Accountable to People</h3>
+                        <p>AI systems should include accountability mechanisms. COMPAS lacks transparency and clear accountability pathways.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="500">
+                    <div class="principle">
+                        <h3><i class="fas fa-eye"></i> Incorporate Privacy Design Principles</h3>
+                        <p>AI systems should incorporate privacy protections. COMPAS uses sensitive personal data with unclear privacy safeguards.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="600">
+                    <div class="principle">
+                        <h3><i class="fas fa-lock"></i> Uphold High Standards of Scientific Excellence</h3>
+                        <p>AI should uphold scientific excellence. COMPAS's proprietary algorithm limits scientific scrutiny and peer review.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Findings Section -->
+    <section id="findings">
+        <div class="container">
+            <div class="section-title" data-aos="fade-up">
+                <h2>Key Findings</h2>
+                <p>Results from our comprehensive audit of the COMPAS algorithm</p>
+            </div>
+            <div class="findings-container">
+                <div class="finding" data-aos="fade-right">
+                    <div class="finding-number">1</div>
+                    <div>
+                        <h3>Racial Disparities in False Positives</h3>
+                        <p>Black defendants were almost twice as likely to be misclassified as higher risk compared to white defendants. The false positive rate was 45% for Black defendants versus 23% for white defendants.</p>
+                    </div>
+                </div>
+                <div class="finding" data-aos="fade-left">
+                    <div class="finding-number">2</div>
+                    <div>
+                        <h3>Accuracy Discrepancies</h3>
+                        <p>Overall predictive accuracy was similar across racial groups (around 60-70%), but the distribution of errors showed significant racial disparities.</p>
+                    </div>
+                </div>
+                <div class="finding" data-aos="fade-right">
+                    <div class="finding-number">3</div>
+                    <div>
+                        <h3>Lack of Transparency</h3>
+                        <p>The proprietary nature of the COMPAS algorithm makes it impossible for defendants, judges, or the public to understand how risk scores are calculated.</p>
+                    </div>
+                </div>
+                <div class="finding" data-aos="fade-left">
+                    <div class="finding-number">4</div>
+                    <div>
+                        <h3>Limited Accountability</h3>
+                        <p>No clear process exists for challenging or appealing COMPAS risk scores, and Northpointe (Equivant) accepts limited responsibility for algorithmic errors.</p>
+                    </div>
+                </div>
+                <div class="finding" data-aos="fade-right">
+                    <div class="finding-number">5</div>
+                    <div>
+                        <h3>Inadequate Validation</h3>
+                        <p>Independent validation of the algorithm's fairness and accuracy has been limited, and the validation performed by Northpointe has not been fully disclosed.</p>
+                    </div>
+                </div>
+                <div class="finding" data-aos="fade-left">
+                    <div class="finding-number">6</div>
+                    <div>
+                        <h3>Gender Biases</h3>
+                        <p>While less pronounced than racial disparities, the algorithm also shows differences in error rates between male and female defendants.</p>
+                    </div>
+                </div>
+                <div class="finding" data-aos="fade-right">
+                    <div class="finding-number">7</div>
+                    <div>
+                        <h3>Contextual Limitations</h3>
+                        <p>The algorithm does not account for contextual factors such as policing patterns, socioeconomic conditions, or regional variations that might affect recidivism rates.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recommendations Section -->
+    <section id="recommendations" class="bg-light">
+        <div class="container">
+            <div class="section-title" data-aos="fade-up">
+                <h2>Recommendations</h2>
+                <p>Actions to improve fairness, accountability, and transparency</p>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="recommendation">
+                        <h3><i class="fas fa-code"></i> Algorithmic Transparency</h3>
+                        <p>Make the COMPAS algorithm open source or provide detailed documentation of its methodology, features, and weighting system to enable independent auditing.</p>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="recommendation">
+                        <h3><i class="fas fa-balance-scale"></i> Regular Bias Audits</h3>
+                        <p>Implement mandatory, regular third-party audits to assess and mitigate biases across different demographic groups, with results made publicly available.</p>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="recommendation">
+                        <h3><i class="fas fa-user-shield"></i> Human Oversight</h3>
+                        <p>Ensure that COMPAS scores are used as one input among many in decision-making, with human judgment serving as the final arbiter.</p>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="400">
+                    <div class="recommendation">
+                        <h3><i class="fas fa-book-open"></i> Clear Documentation</h3>
+                        <p>Provide clear documentation to users about the limitations of the algorithm, its error rates, and appropriate contexts for use.</p>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="500">
+                    <div class="recommendation">
+                        <h3><i class="fas fa-gavel"></i> Appeal Process</h3>
+                        <p>Establish a clear process for defendants to challenge their risk scores and receive explanations of how their scores were calculated.</p>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="600">
+                    <div class="recommendation">
+                        <h3><i class="fas fa-chart-line"></i> Continuous Monitoring</h3>
+                        <p>Implement ongoing monitoring of algorithm performance across different jurisdictions and demographic groups to identify and address disparities.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- GitHub Section -->
+    <section id="github">
+        <div class="container">
+            <div class="section-title" data-aos="fade-up">
+                <h2>Explore the Project</h2>
+                <p>Access the complete analysis and code on GitHub</p>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-lg-8 text-center" data-aos="zoom-in">
+                    <div class="card">
+                        <i class="fab fa-github fa-4x mb-3" style="color: var(--dark);"></i>
+                        <h3>COMPAS Algorithm Audit Repository</h3>
+                        <p>The complete code, data analysis, and visualizations are available on GitHub. Explore the methodology, reproduce the analysis, and contribute to the project.</p>
+                        <a href="https://github.com/ArathiS1/COMPAS-Algorithm-Audit" class="btn" target="_blank">View on GitHub</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <div class="logo text-white mb-3">
+                        <span class="logo-icon"><i class="fas fa-chart-line"></i></span>
+                        COMPAS Audit
+                    </div>
+                    <p>An independent audit of the COMPAS recidivism algorithm evaluating its compliance with ethical AI principles.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-github"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fas fa-envelope"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-4">
+                    <h5>Quick Links</h5>
+                    <ul class="footer-links">
+                        <li><a href="#overview">Overview</a></li>
+                        <li><a href="#methodology">Methodology</a></li>
+                        <li><a href="#principles">AI Principles</a></li>
+                        <li><a href="#findings">Findings</a></li>
+                        <li><a href="#recommendations">Recommendations</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-4 mb-4">
+                    <h5>Resources</h5>
+                    <ul class="footer-links">
+                        <li><a href="https://github.com/ArathiS1/COMPAS-Algorithm-Audit">GitHub Repository</a></li>
+                        
+                    </ul>
+                </div>
+                
+            </div>
+            
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+        
+        // Initialize particles.js
+        document.addEventListener('DOMContentLoaded', function() {
+            particlesJS('particles-js', {
+                "particles": {
+                    "number": {
+                        "value": 80,
+                        "density": {
+                            "enable": true,
+                            "value_area": 800
+                        }
+                    },
+                    "color": {
+                        "value": "#ffffff"
+                    },
+                    "shape": {
+                        "type": "circle",
+                        "stroke": {
+                            "width": 0,
+                            "color": "#000000"
+                        }
+                    },
+                    "opacity": {
+                        "value": 0.5,
+                        "random": false,
+                        "anim": {
+                            "enable": false,
+                            "speed": 1,
+                            "opacity_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "size": {
+                        "value": 3,
+                        "random": true,
+                        "anim": {
+                            "enable": false,
+                            "speed": 40,
+                            "size_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "line_linked": {
+                        "enable": true,
+                        "distance": 150,
+                        "color": "#ffffff",
+                        "opacity": 0.4,
+                        "width": 1
+                    },
+                    "move": {
+                        "enable": true,
+                        "speed": 2,
+                        "direction": "none",
+                        "random": false,
+                        "straight": false,
+                        "out_mode": "out",
+                        "bounce": false,
+                        "attract": {
+                            "enable": false,
+                            "rotateX": 600,
+                            "rotateY": 1200
+                        }
+                    }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": {
+                        "onhover": {
+                            "enable": true,
+                            "mode": "grab"
+                        },
+                        "onclick": {
+                            "enable": true,
+                            "mode": "push"
+                        },
+                        "resize": true
+                    },
+                    "modes": {
+                        "grab": {
+                            "distance": 140,
+                            "line_linked": {
+                                "opacity": 1
+                            }
+                        },
+                        "push": {
+                            "particles_nb": 4
+                        }
+                    }
+                },
+                "retina_detect": true
+            });
+            
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
